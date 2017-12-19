@@ -9,9 +9,20 @@ namespace EnigmaApp
 {
     public partial class Contact : Page
     {
+        int rotor1Index;
+        int rotor2Index;
+        int rotor3Index;
+        int staticIndex;
+
+        //create the static wheel, rotors, and reflector
+        char[] staticWheel = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+        char[] rotor1 = { 'E', 'K', 'M', 'F', 'L', 'G', 'D', 'Q', 'V', 'Z', 'N', 'T', 'O', 'W', 'Y', 'H', 'X', 'U', 'S', 'P', 'A', 'I', 'B', 'R', 'C', 'J' };
+        char[] rotor2 = { 'A', 'J', 'D', 'K', 'S', 'I', 'R', 'U', 'X', 'B', 'L', 'H', 'W', 'T', 'M', 'C', 'Q', 'G', 'Z', 'N', 'P', 'Y', 'F', 'V', 'O', 'E' };
+        char[] rotor3 = { 'B', 'D', 'F', 'H', 'J', 'L', 'C', 'P', 'R', 'T', 'X', 'V', 'Z', 'N', 'Y', 'E', 'I', 'W', 'G', 'A', 'K', 'M', 'U', 'S', 'Q', 'O' };
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         protected void QButton_Click(object sender, EventArgs e)
@@ -66,7 +77,7 @@ namespace EnigmaApp
 
         protected void AButton_Click(object sender, EventArgs e)
         {
-            OutputTxt.Text += "A";
+            OutputTxt.Text += UseRotors('A');
         }
 
         protected void SButton_Click(object sender, EventArgs e)
@@ -152,6 +163,10 @@ namespace EnigmaApp
         protected void ResetButton_Click(object sender, EventArgs e)
         {
             OutputTxt.Text = "";
+            rotor1Index = 0;
+            rotor2Index = 0;
+            rotor3Index = 0;
+            staticIndex = 0;
         }
 
         protected void RotorNumList_SelectedIndexChanged(object sender, EventArgs e)
@@ -159,14 +174,54 @@ namespace EnigmaApp
 
         }
 
-        protected char UseRotors ()
+        protected char UseRotors(char input)
         {
-            Rotor staticWheel = new Rotor();
-            Rotor Wheel3 = new Rotor();
-            Rotor Wheel2 = new Rotor();
-            Rotor Wheel1 = new Rotor();
-            Rotor Reflector = new Rotor();
+            char output;
+            for (int i = 0; i < 26; i++)
+            {
+                if (staticWheel[i] == input)
+                {
+                    staticIndex = i;
+                }
+            }
+            output = rotor1[staticIndex + rotor1Index];
 
+            for(int i = 0; i < 26; i++)
+            {
+                if(staticWheel[i] == output)
+                {
+                    staticIndex = i;
+                }
+            }
+            output = rotor2[staticIndex + rotor2Index];
+            
+            for(int i = 0; i < 26; i++)
+            {
+                if(staticWheel[i] == output)
+                {
+                    staticIndex = i;
+                }
+            }
+            output = rotor3[staticIndex + rotor3Index];
+
+            //advance the rotors
+            rotor1Index++;
+            if(rotor1Index > 25)
+            {
+                rotor1Index = 0;
+                rotor2Index++;
+            }
+            if(rotor2Index > 25)
+            {
+                rotor2Index = 0;
+                rotor3Index++;
+            }
+            if(rotor3Index > 25)
+            {
+                rotor3Index = 0;
+            }
+            return output;
         }
+
     }
 }
